@@ -1,0 +1,142 @@
+:root {
+  --powder-blush: #ffadadff;
+  --apricot-cream: #ffd6a5ff;
+  --cream: #fdffb6ff;
+  --tea-green: #caffbfff;
+  --electric-aqua: #9bf6ffff;
+  --baby-blue-ice: #a0c4ffff;
+  --periwinkle: #bdb2ffff;
+  --mauve: #ffc6ffff;
+  --porcelain: #fffffcff;
+}
+
+/* Body background */
+.login-body {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Poppins', sans-serif;
+  background: var(--powder-blush); /* soft pink */
+}
+
+/* Signup container */
+.login-container {
+  background: var(--apricot-cream);
+  border-radius: 25px;
+  padding: 40px;
+  width: 360px;
+  text-align: center;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+  color: #333;
+}
+
+/* Logo & tagline */
+.logo {
+  font-family: 'Arial Black';
+  font-size: 42px;
+  color: var(--periwinkle);
+  margin-bottom: 5px;
+}
+
+.tagline {
+  font-size: 14px;
+  color: #333;
+  margin-bottom: 25px;
+}
+
+/* Input fields */
+.login-form input {
+  width: 100%;
+  padding: 14px;
+  margin: 8px 0;
+  border-radius: 15px;
+  border: none;
+  background: var(--porcelain); /* white */
+  color: #333;
+  font-size: 14px;
+}
+
+.login-form input::placeholder {
+  color: #666;
+}
+
+/* Buttons */
+.login-form button {
+  width: 100%;
+  padding: 14px;
+  margin-top: 15px;
+  border-radius: 20px;
+  border: none;
+  background: var(--electric-aqua);
+  color: #fff;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 16px;
+  transition: 0.3s;
+}
+
+.login-form button:hover {
+  background: var(--tea-green);
+}
+
+/* Divider */
+.divider {
+  display: flex;
+  align-items: center;
+  margin: 20px 0;
+  color: #333;
+}
+
+.divider span {
+  flex: 1;
+  height: 1px;
+  background: #aaa;
+}
+
+.divider p {
+  margin: 0 10px;
+  font-size: 12px;
+}
+
+/* Google button */
+.google-btn {
+  width: 100%;
+  padding: 12px;
+  border-radius: 20px;
+  border: 2px solid var(--electric-aqua);
+  background: white;
+  color: var(--electric-aqua);
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.google-btn:hover {
+  background: var(--electric-aqua);
+  color: white;
+}
+
+/* Forgot password */
+.forgot {
+  font-size: 12px;
+  color: var(--periwinkle);
+  margin-top: 15px;
+  cursor: pointer;
+}
+
+/* Signup box */
+.signup-box {
+  background: var(--mauve);
+  border-radius: 20px;
+  padding: 15px;
+  width: 360px;
+  text-align: center;
+  margin-top: 15px;
+  color: #333;
+}
+
+.signup-box span {
+  color: var(--periwinkle);
+  font-weight: bold;
+  cursor: pointer;
+}
