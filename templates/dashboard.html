@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard - ALGORA{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    <div class="dashboard-header">
+        <h1>Welcome, {{ current_user.username }}! 👋</h1>
+        <p>Choose your class and start learning</p>
+    </div>
+    
+    <div class="class-selector dashboard-classes">
+        <div class="class-card large">
+            <div class="class-header">
+                <h2>Class 11</h2>
+                <p>Foundations & Core Concepts</p>
+            </div>
+            <div class="subject-grid">
+                {% for subject in subjects_11 %}
+                    <div class="subject-card">
+                        <div class="subject-icon">{{ subject.icon }}</div>
+                        <h4>{{ subject.name }}</h4>
+                        <p>{{ subject.description }}</p>
+                        <a href="{{ url_for('view_subject', subject_id=subject.id) }}" class="btn-small">Explore</a>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        
+        <div class="class-card large">
+            <div class="class-header">
+                <h2>Class 12</h2>
+                <p>Advanced Topics & Applications</p>
+            </div>
+            <div class="subject-grid">
+                {% for subject in subjects_12 %}
+                    <div class="subject-card">
+                        <div class="subject-icon">{{ subject.icon }}</div>
+                        <h4>{{ subject.name }}</h4>
+                        <p>{{ subject.description }}</p>
+                        <a href="{{ url_for('view_subject', subject_id=subject.id) }}" class="btn-small">Explore</a>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ chapter.name }} - {{ chapter.subject.name }}{% endblock %}
+
+{% block content %}
+<div class="chapter-container">
+    <div class="chapter-header">
+        <a href="{{ url_for('view_subject', subject_id=chapter.subject.id) }}" class="back-link">← Back to {{ chapter.subject.name }}</a>
+        <h1>{{ chapter.name }}</h1>
+        <p class="chapter-description">{{ chapter.description }}</p>
+    </div>
+    
+    <!-- Resources Section -->
+    <div class="resources-section">
+        <h2>Study Materials</h2>
+        
+        {% if resources %}
+            <div class="resources-grid">
+                {% for resource in resources %}
+                    <div class="resource-card resource-{{ resource.type }}">
+                        <div class="resource-header">
+                            <span class="resource-type-badge">{{ resource.type|replace('_', ' ')|title }}</span>
+                            {% if resource.id in bookmarked_ids %}
+                                <button class="bookmark-btn bookmarked" onclick="toggleBookmark({{ resource.id }})" title="Remove bookmark">📌</button>
+                            {% else %}
+                                <button class="bookmark-btn" onclick="toggleBookmark({{ resource.id }})" title="Add bookmark">📍</button>
+                            {% endif %}
+                        </div>
+                        <h3>{{ resource.title }}</h3>
+                        
+                        {% if resource.type == 'notes' or resource.type == 'important_questions' %}
+                            <p>{{ resource.content[:200] }}...</p>
+                            {% if resource.file_path %}
+                                <a href="{{ url_for('download_resource', resource_id=resource.id) }}" class="btn btn-small">📥 Download</a>
+                            {% endif %}
+                        {% elif resource.type == 'video' %}
+                            <div class="video-container">
+                                <iframe width="100%" height="200" src="{{ resource.content }}" frameborder="0" allowfullscreen></iframe>
+                            </div>
+                        {% elif resource.type == 'pyq' %}
+                            <p>{{ resource.content[:200] }}...</p>
+                            {% if resource.file_path %}
+                                <a href="{{ url_for('download_resource', resource_id=resource.id) }}" class="btn btn-small">📥 Download PYQ</a>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="empty-state">No resources available yet.</p>
+        {% endif %}
+    </div>
+    
+    <!-- Quiz Section -->
+    {% if quiz_questions %}
+        <div class="quiz-section">
+            <h2>Test Your Knowledge</h2>
+            <p>Practice with {{ quiz_questions|length }} quiz questions to strengthen your understanding</p>
+            <a href="{{ url_for('take_quiz', chapter_id=chapter.id) }}" class="btn btn-primary">Start Quiz 🧠</a>
+        </div>
+    {% endif %}
+</div>
+
+<script>
+function toggleBookmark(resourceId) {
+    fetch(`/bookmark/${resourceId}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        const btn = event.target;
+        if (data.status === 'added') {
+            btn.classList.add('bookmarked');
+            btn.textContent = '📌';
+        } else {
+            btn.classList.remove('bookmarked');
+            btn.textContent = '📍';
+        }
+    });
+}
+</script>
+{% endblock %}

@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block title %}Search - ALGORA{% endblock %}
+
+{% block content %}
+<div class="search-container">
+    <div class="search-header">
+        <h1>🔍 Search ALGORA</h1>
+        <form method="GET" class="search-form">
+            <input type="text" name="q" placeholder="Search chapters, subjects, topics..." value="{{ query }}" required>
+            <button type="submit" class="btn btn-primary">Search</button>
+        </form>
+    </div>
+    
+    {% if query %}
+        <div class="search-results">
+            {% if chapters or resources %}
+                {% if chapters %}
+                    <div class="search-category">
+                        <h2>Chapters ({{ chapters|length }})</h2>
+                        <div class="search-list">
+                            {% for chapter in chapters %}
+                                <div class="search-item chapter-item">
+                                    <h3>{{ chapter.name }}</h3>
+                                    <p class="search-meta">{{ chapter.subject.name }} - Class {{ chapter.subject.class_level }}</p>
+                                    <a href="{{ url_for('view_chapter', chapter_id=chapter.id) }}" class="btn btn-small">View</a>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endif %}
+                
+                {% if resources %}
+                    <div class="search-category">
+                        <h2>Resources ({{ resources|length }})</h2>
+                        <div class="search-list">
+                            {% for resource in resources %}
+                                <div class="search-item resource-item">
+                                    <h3>{{ resource.title }}</h3>
+                                    <p class="search-type">{{ resource.type|replace('_', ' ')|title }}</p>
+                                    <p class="search-meta">{{ resource.chapter.name }} - {{ resource.chapter.subject.name }}</p>
+                                    <a href="{{ url_for('view_chapter', chapter_id=resource.chapter.id) }}" class="btn btn-small">View</a>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endif %}
+            {% else %}
+                <div class="empty-state-large">
+                    <p>No results found for "{{ query }}"</p>
+                    <p>Try a different search term</p>
+                </div>
+            {% endif %}
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

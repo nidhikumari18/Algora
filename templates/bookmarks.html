@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block title %}My Bookmarks - ALGORA{% endblock %}
+
+{% block content %}
+<div class="bookmarks-container">
+    <div class="bookmarks-header">
+        <h1>📌 My Bookmarks</h1>
+        <p>Your saved resources for quick access</p>
+    </div>
+    
+    {% if resources %}
+        <div class="bookmarks-grid">
+            {% for resource in resources %}
+                <div class="bookmark-card">
+                    <div class="bookmark-type">{{ resource.type|replace('_', ' ')|title }}</div>
+                    <h3>{{ resource.title }}</h3>
+                    <p class="bookmark-chapter">Chapter: {{ resource.chapter.name }}</p>
+                    <p class="bookmark-subject">Subject: {{ resource.chapter.subject.name }}</p>
+                    
+                    {% if resource.type == 'notes' or resource.type == 'important_questions' %}
+                        <p>{{ resource.content[:100] }}...</p>
+                        {% if resource.file_path %}
+                            <a href="{{ url_for('download_resource', resource_id=resource.id) }}" class="btn btn-small">📥 Download</a>
+                        {% endif %}
+                    {% elif resource.type == 'video' %}
+                        <a href="{{ url_for('view_chapter', chapter_id=resource.chapter.id) }}" class="btn btn-small">▶️ Watch</a>
+                    {% endif %}
+                    
+                    <a href="{{ url_for('view_chapter', chapter_id=resource.chapter.id) }}" class="btn btn-small">View Chapter</a>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="empty-state-large">
+            <p>No bookmarks yet</p>
+            <p>Start bookmarking resources to save them for later!</p>
+            <a href="{{ url_for('dashboard') }}" class="btn btn-primary">Go to Dashboard</a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

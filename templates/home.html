@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+
+{% block title %}ALGORA - Welcome{% endblock %}
+
+{% block content %}
+<div class="hero-section">
+    <div class="hero-content">
+        <h1 class="hero-title">Welcome to <span class="gradient-text">ALGORA</span></h1>
+        <p class="hero-subtitle">Your personalized learning platform for Class 11-12 Science</p>
+        <p class="hero-description">Master Physics, Chemistry, Mathematics & Biology with curated notes, videos, and interactive quizzes</p>
+        
+        <div class="hero-cta">
+            {% if current_user.is_authenticated %}
+                <a href="{{ url_for('dashboard') }}" class="btn btn-primary">Continue Learning 🚀</a>
+            {% else %}
+                <a href="{{ url_for('register') }}" class="btn btn-primary">Start Learning 🚀</a>
+                <a href="{{ url_for('login') }}" class="btn btn-secondary">Login</a>
+            {% endif %}
+        </div>
+    </div>
+    <div class="hero-illustration">
+        <div class="floating-card">📚</div>
+        <div class="floating-card" style="animation-delay: 0.5s;">🔬</div>
+        <div class="floating-card" style="animation-delay: 1s;">🧪</div>
+    </div>
+</div>
+
+<!-- Featured Subjects Section -->
+<section class="featured-section">
+    <h2>Featured Subjects</h2>
+    <p class="section-subtitle">Choose your class and start learning</p>
+    
+    <div class="class-selector">
+        <div class="class-card">
+            <h3>Class 11</h3>
+            <p>Foundations & Core Concepts</p>
+            <div class="subject-grid">
+                {% for subject in subjects_11 %}
+                    <div class="subject-card">
+                        <div class="subject-icon">{{ subject.icon }}</div>
+                        <h4>{{ subject.name }}</h4>
+                        <p>{{ subject.description }}</p>
+                        {% if current_user.is_authenticated %}
+                            <a href="{{ url_for('view_subject', subject_id=subject.id) }}" class="btn-small">Explore</a>
+                        {% else %}
+                            <a href="{{ url_for('login') }}" class="btn-small">Login to Learn</a>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        
+        <div class="class-card">
+            <h3>Class 12</h3>
+            <p>Advanced Topics & Applications</p>
+            <div class="subject-grid">
+                {% for subject in subjects_12 %}
+                    <div class="subject-card">
+                        <div class="subject-icon">{{ subject.icon }}</div>
+                        <h4>{{ subject.name }}</h4>
+                        <p>{{ subject.description }}</p>
+                        {% if current_user.is_authenticated %}
+                            <a href="{{ url_for('view_subject', subject_id=subject.id) }}" class="btn-small">Explore</a>
+                        {% else %}
+                            <a href="{{ url_for('login') }}" class="btn-small">Login to Learn</a>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="features-section">
+    <h2>Why Choose ALGORA?</h2>
+    <div class="features-grid">
+        <div class="feature-card">
+            <div class="feature-icon">📖</div>
+            <h3>Comprehensive Notes</h3>
+            <p>Well-organized study materials covering every concept with clarity</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">🎥</div>
+            <h3>Video Lectures</h3>
+            <p>Engaging video explanations to help you understand better</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">🧩</div>
+            <h3>Interactive Quizzes</h3>
+            <p>Test your knowledge with MCQs and get instant feedback</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">📌</div>
+            <h3>Bookmark System</h3>
+            <p>Save important resources for quick access anytime</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">🔍</div>
+            <h3>Smart Search</h3>
+            <p>Quickly find chapters and resources you need</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">✨</div>
+            <h3>Beautiful UI</h3>
+            <p>Clean, modern, and distraction-free learning experience</p>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

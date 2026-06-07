@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+
+{% block title %}Quiz - {{ chapter.name }}{% endblock %}
+
+{% block content %}
+<div class="quiz-container">
+    <div class="quiz-header">
+        <a href="{{ url_for('view_chapter', chapter_id=chapter.id) }}" class="back-link">← Back to Chapter</a>
+        <h1>{{ chapter.name }} - Quiz</h1>
+        <p>Test your understanding with these questions</p>
+    </div>
+    
+    <form id="quizForm" class="quiz-form">
+        <input type="hidden" name="chapter_id" value="{{ chapter.id }}">
+        
+        {% for quiz in quiz_questions %}
+            <div class="quiz-question-card">
+                <div class="question-number">Question {{ loop.index }} of {{ quiz_questions|length }}</div>
+                <h3>{{ quiz.question }}</h3>
+                
+                <div class="options">
+                    <label class="option">
+                        <input type="radio" name="answers[{{ quiz.id }}]" value="A" required>
+                        <span class="option-text"><strong>A.</strong> {{ quiz.option_a }}</span>
+                    </label>
+                    
+                    <label class="option">
+                        <input type="radio" name="answers[{{ quiz.id }}]" value="B">
+                        <span class="option-text"><strong>B.</strong> {{ quiz.option_b }}</span>
+                    </label>
+                    
+                    <label class="option">
+                        <input type="radio" name="answers[{{ quiz.id }}]" value="C">
+                        <span class="option-text"><strong>C.</strong> {{ quiz.option_c }}</span>
+                    </label>
+                    
+                    <label class="option">
+                        <input type="radio" name="answers[{{ quiz.id }}]" value="D">
+                        <span class="option-text"><strong>D.</strong> {{ quiz.option_d }}</span>
+                    </label>
+                </div>
+            </div>
+        {% endfor %}
+        
+        <button type="submit" class="btn btn-primary btn-large">Submit Quiz</button>
+    </form>
+    
+    <div id="resultModal" class="modal" style="display: none;">
+        <div class="modal-content result-card">
+            <h2>Quiz Complete! 🎉</h2>
+            <div class="result-stats">
+                <div class="stat">
+                    <span class="stat-label">Score</span>
+                    <span class="stat-value" id="scorePercentage">0%</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-label">Correct</span>
+                    <span class="stat-value" id="correctCount">0</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-label">Total</span>
+                    <span class="stat-value" id="totalCount">0</span>
+                </div>
+            </div>
+            <p id="resultMessage"></p>
+            <div class="result-actions">
+                <a href="{{ url_for('view_chapter', chapter_id=chapter.id) }}" class="btn btn-primary">Back to Chapter</a>
+                <button onclick="location.reload()" class="btn btn-secondary">Retake Quiz</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('quizForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(this);
+    const answers = {};
+    
+    // Parse form data
+    for (let [key, value] of formData.entries()) {
+        if (key.startsWith('answers[')) {
+            const quizId = key.match(/\[(\d+)\]/)[1];
+            answers[quizId] = value;
+        }
+    }
+    
+    fetch('/submit-quiz', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            chapter_id: {{ chapter.id }},
+            answers: answers
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        document.getElementById('correctCount').textContent = data.correct;
+        document.getElementById('totalCount').textContent = data.total;
+        document.getElementById('scorePercentage').textContent = data.percentage + '%';
+        
+        let message = '';
+        if (data.percentage === 100) message = '🌟 Perfect Score! Outstanding!';
+        else if (data.percentage >= 80) message = '🎯 Great Job! Keep practicing!';
+        else if (data.percentage >= 60) message = '👍 Good Effort! Review the topics.';
+        else message = '📚 Keep Learning! Review all topics.';
+        
+        document.getElementById('resultMessage').textContent = message;
+        document.getElementById('resultModal').style.display = 'flex';
+    });
+});
+</script>
+{% endblock %}
