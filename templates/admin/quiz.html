@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block title %}Quiz - {{ chapter.name }}{% endblock %}
+
+{% block content %}
+<div class="admin-container">
+    <div class="admin-header">
+        <div>
+            <h1>🧠 {{ chapter.name }} - Quiz Questions</h1>
+            <p><a href="{{ url_for('admin_chapters', subject_id=chapter.subject.id) }}" class="back-link">← Back to Chapters</a></p>
+        </div>
+        <a href="{{ url_for('admin_add_quiz', chapter_id=chapter.id) }}" class="btn btn-primary">+ Add Question</a>
+    </div>
+    
+    <div class="admin-table-container">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>Question</th>
+                    <th>Correct Answer</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for quiz in quiz_questions %}
+                    <tr>
+                        <td><strong>{{ quiz.question[:100] }}...</strong></td>
+                        <td><span class="badge correct">{{ quiz.correct_answer }}</span></td>
+                        <td>
+                            <a href="{{ url_for('admin_edit_quiz', quiz_id=quiz.id) }}" class="btn-small">Edit</a>
+                            <form method="POST" action="{{ url_for('admin_delete_quiz', quiz_id=quiz.id) }}" style="display: inline;" onsubmit="return confirm('Are you sure?');">
+                                <button type="submit" class="btn-small danger">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

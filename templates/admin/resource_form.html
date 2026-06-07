@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block title %}{% if resource %}Edit Resource{% else %}Add Resource{% endif %} - Admin{% endblock %}
+
+{% block content %}
+<div class="admin-container">
+    <div class="admin-header">
+        <h1>{% if resource %}✏️ Edit Resource{% else %}➕ Add Resource{% endif %}</h1>
+        <p class="subtitle">{{ chapter.name }}</p>
+    </div>
+    
+    <form method="POST" enctype="multipart/form-data" class="admin-form">
+        <div class="form-group">
+            <label for="title">Resource Title *</label>
+            <input type="text" id="title" name="title" value="{{ resource.title if resource else '' }}" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="type">Resource Type *</label>
+            <select id="type" name="type" required>
+                <option value="">Select Type</option>
+                <option value="notes" {% if resource and resource.type == 'notes' %}selected{% endif %}>Notes</option>
+                <option value="video" {% if resource and resource.type == 'video' %}selected{% endif %}>Video</option>
+                <option value="pyq" {% if resource and resource.type == 'pyq' %}selected{% endif %}>Previous Year Questions</option>
+                <option value="important_questions" {% if resource and resource.type == 'important_questions' %}selected{% endif %}>Important Questions</option>
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label for="content">Content / URL / Text</label>
+            <textarea id="content" name="content" rows="5">{{ resource.content if resource else '' }}</textarea>
+        </div>
+        
+        <div class="form-group">
+            <label for="file">Upload File (PDF, etc.)</label>
+            <input type="file" id="file" name="file" accept=".pdf,.doc,.docx,.txt">
+        </div>
+        
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">{% if resource %}Update Resource{% else %}Add Resource{% endif %}</button>
+            <a href="{{ url_for('admin_resources', chapter_id=chapter.id) }}" class="btn btn-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

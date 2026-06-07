@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block title %}Manage Subjects - Admin{% endblock %}
+
+{% block content %}
+<div class="admin-container">
+    <div class="admin-header">
+        <h1>📚 Manage Subjects</h1>
+        <a href="{{ url_for('admin_add_subject') }}" class="btn btn-primary">+ Add Subject</a>
+    </div>
+    
+    <div class="admin-table-container">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Class</th>
+                    <th>Chapters</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for subject in subjects %}
+                    <tr>
+                        <td><strong>{{ subject.name }}</strong></td>
+                        <td>Class {{ subject.class_level }}</td>
+                        <td>
+                            <a href="{{ url_for('admin_chapters', subject_id=subject.id) }}" class="link">{{ subject.chapters|length }} chapters</a>
+                        </td>
+                        <td>
+                            <a href="{{ url_for('admin_edit_subject', subject_id=subject.id) }}" class="btn-small">Edit</a>
+                            <form method="POST" action="{{ url_for('admin_delete_subject', subject_id=subject.id) }}" style="display: inline;" onsubmit="return confirm('Are you sure?');">
+                                <button type="submit" class="btn-small danger">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

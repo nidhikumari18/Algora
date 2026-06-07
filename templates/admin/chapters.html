@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block title %}Chapters - {{ subject.name }}{% endblock %}
+
+{% block content %}
+<div class="admin-container">
+    <div class="admin-header">
+        <div>
+            <h1>📖 {{ subject.name }} - Chapters</h1>
+            <p><a href="{{ url_for('admin_subjects') }}" class="back-link">← Back to Subjects</a></p>
+        </div>
+        <a href="{{ url_for('admin_add_chapter', subject_id=subject.id) }}" class="btn btn-primary">+ Add Chapter</a>
+    </div>
+    
+    <div class="admin-table-container">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Order</th>
+                    <th>Resources</th>
+                    <th>Quiz Questions</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for chapter in chapters %}
+                    <tr>
+                        <td><strong>{{ chapter.name }}</strong></td>
+                        <td>{{ chapter.order }}</td>
+                        <td>
+                            <a href="{{ url_for('admin_resources', chapter_id=chapter.id) }}" class="link">{{ chapter.resources|length }} resources</a>
+                        </td>
+                        <td>
+                            <a href="{{ url_for('admin_quiz', chapter_id=chapter.id) }}" class="link">{{ chapter.quiz_questions|length }} questions</a>
+                        </td>
+                        <td>
+                            <a href="{{ url_for('admin_edit_chapter', chapter_id=chapter.id) }}" class="btn-small">Edit</a>
+                            <a href="{{ url_for('admin_resources', chapter_id=chapter.id) }}" class="btn-small">Resources</a>
+                            <a href="{{ url_for('admin_quiz', chapter_id=chapter.id) }}" class="btn-small">Quiz</a>
+                            <form method="POST" action="{{ url_for('admin_delete_chapter', chapter_id=chapter.id) }}" style="display: inline;" onsubmit="return confirm('Are you sure?');">
+                                <button type="submit" class="btn-small danger">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block title %}Resources - {{ chapter.name }}{% endblock %}
+
+{% block content %}
+<div class="admin-container">
+    <div class="admin-header">
+        <div>
+            <h1>📄 {{ chapter.name }} - Resources</h1>
+            <p><a href="{{ url_for('admin_chapters', subject_id=chapter.subject.id) }}" class="back-link">← Back to Chapters</a></p>
+        </div>
+        <a href="{{ url_for('admin_add_resource', chapter_id=chapter.id) }}" class="btn btn-primary">+ Add Resource</a>
+    </div>
+    
+    <div class="admin-table-container">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Type</th>
+                    <th>File</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for resource in resources %}
+                    <tr>
+                        <td><strong>{{ resource.title }}</strong></td>
+                        <td><span class="badge">{{ resource.type|replace('_', ' ')|title }}</span></td>
+                        <td>{% if resource.file_path %}✓ Uploaded{% else %}-{% endif %}</td>
+                        <td>
+                            <a href="{{ url_for('admin_edit_resource', resource_id=resource.id) }}" class="btn-small">Edit</a>
+                            <form method="POST" action="{{ url_for('admin_delete_resource', resource_id=resource.id) }}" style="display: inline;" onsubmit="return confirm('Are you sure?');">
+                                <button type="submit" class="btn-small danger">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

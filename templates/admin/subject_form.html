@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block title %}{% if subject %}Edit Subject{% else %}Add Subject{% endif %} - Admin{% endblock %}
+
+{% block content %}
+<div class="admin-container">
+    <div class="admin-header">
+        <h1>{% if subject %}✏️ Edit Subject{% else %}➕ Add Subject{% endif %}</h1>
+    </div>
+    
+    <form method="POST" class="admin-form">
+        <div class="form-group">
+            <label for="name">Subject Name *</label>
+            <input type="text" id="name" name="name" value="{{ subject.name if subject else '' }}" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="description">Description</label>
+            <textarea id="description" name="description" rows="3">{{ subject.description if subject else '' }}</textarea>
+        </div>
+        
+        <div class="form-group">
+            <label for="class_level">Class Level *</label>
+            <select id="class_level" name="class_level" required>
+                <option value="">Select Class</option>
+                <option value="11" {% if subject and subject.class_level == 11 %}selected{% endif %}>Class 11</option>
+                <option value="12" {% if subject and subject.class_level == 12 %}selected{% endif %}>Class 12</option>
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label for="icon">Icon (Emoji)</label>
+            <input type="text" id="icon" name="icon" value="{{ subject.icon if subject else '' }}" placeholder="e.g., 🔬">
+        </div>
+        
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">{% if subject %}Update Subject{% else %}Add Subject{% endif %}</button>
+            <a href="{{ url_for('admin_subjects') }}" class="btn btn-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block title %}{% if quiz %}Edit Question{% else %}Add Question{% endif %} - Admin{% endblock %}
+
+{% block content %}
+<div class="admin-container">
+    <div class="admin-header">
+        <h1>{% if quiz %}✏️ Edit Question{% else %}➕ Add Question{% endif %}</h1>
+        <p class="subtitle">{{ chapter.name }}</p>
+    </div>
+    
+    <form method="POST" class="admin-form">
+        <div class="form-group">
+            <label for="question">Question *</label>
+            <textarea id="question" name="question" rows="3" required>{{ quiz.question if quiz else '' }}</textarea>
+        </div>
+        
+        <div class="form-row">
+            <div class="form-group">
+                <label for="option_a">Option A *</label>
+                <input type="text" id="option_a" name="option_a" value="{{ quiz.option_a if quiz else '' }}" required>
+            </div>
+            <div class="form-group">
+                <label for="option_b">Option B *</label>
+                <input type="text" id="option_b" name="option_b" value="{{ quiz.option_b if quiz else '' }}" required>
+            </div>
+        </div>
+        
+        <div class="form-row">
+            <div class="form-group">
+                <label for="option_c">Option C *</label>
+                <input type="text" id="option_c" name="option_c" value="{{ quiz.option_c if quiz else '' }}" required>
+            </div>
+            <div class="form-group">
+                <label for="option_d">Option D *</label>
+                <input type="text" id="option_d" name="option_d" value="{{ quiz.option_d if quiz else '' }}" required>
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label for="correct_answer">Correct Answer *</label>
+            <select id="correct_answer" name="correct_answer" required>
+                <option value="">Select Correct Answer</option>
+                <option value="A" {% if quiz and quiz.correct_answer == 'A' %}selected{% endif %}>A</option>
+                <option value="B" {% if quiz and quiz.correct_answer == 'B' %}selected{% endif %}>B</option>
+                <option value="C" {% if quiz and quiz.correct_answer == 'C' %}selected{% endif %}>C</option>
+                <option value="D" {% if quiz and quiz.correct_answer == 'D' %}selected{% endif %}>D</option>
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label for="explanation">Explanation</label>
+            <textarea id="explanation" name="explanation" rows="3">{{ quiz.explanation if quiz else '' }}</textarea>
+        </div>
+        
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">{% if quiz %}Update Question{% else %}Add Question{% endif %}</button>
+            <a href="{{ url_for('admin_quiz', chapter_id=chapter.id) }}" class="btn btn-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}
